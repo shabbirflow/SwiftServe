@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: swiftserve-serving
+  name: swiftserve-serving
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swiftserve-serving
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: swiftserve-serving
+    spec:
+      containers:
+      - image: shabbirdocks/swift-serves-stuff:2
+        imagePullPolicy: IfNotPresent
+        name: swift-serves-stuff
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

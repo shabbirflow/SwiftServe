@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: swiftserve-building
+  name: swiftserve-building
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swiftserve-building
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: swiftserve-building
+    spec:
+      containers:
+      - image: shabbirdocks/swift-builds-stuff:3
+        imagePullPolicy: IfNotPresent
+        name: swift-builds-stuff
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
